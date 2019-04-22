@@ -1,0 +1,95 @@
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin= require('copy-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+module.exports = {
+    mode: 'production',
+    entry: './src/index.js',
+    output: {
+        path: path.join(process.cwd(), 'dist'),
+        filename: '[name].js',
+    },
+    module: {
+        rules: [{
+            test: /\.js?$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader',
+            },
+        }, {
+            test: /\.(scss|css)$/,
+            use: [{
+                loader: MiniCssExtractPlugin.loader,
+            }, {
+                loader: 'css-loader',
+            }, {
+                loader: 'sass-loader',
+            }, {
+                loader: 'sass-resources-loader',
+                options: {
+                    resources: [
+                        './src/assets/styles/_variables.scss',
+                    ],
+                },
+            }],
+        },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                use: [
+                    'file-loader',
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            bypassOnDebug: true, // webpack@1.x
+                            disable: true, // webpack@2.x and newer
+                            mozjpeg: {
+                                progressive: true,
+                                quality: 65
+                            },
+                        },
+                    },
+                ],
+            }
+        ],
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+        }),
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: require('cssnano'),
+            cssProcessorPluginOptions: {
+                preset: ['default', { discardComments: { removeAll: true } }],
+            },
+            canPrint: true
+        }),
+        new HtmlWebpackPlugin({
+            title: 'Webpack Sandbox',
+            filename: 'index.html',
+            chunks: ['main'],
+            template: './src/assets/templates/index.html',
+            inject: true,
+            minify: {
+                collapseWhitespace: true,
+                removeComments: true,
+                removeRedundantAttributes: true,
+                removeScriptTypeAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                useShortDoctype: true
+            }
+        }),
+        new CopyWebpackPlugin([{
+            from: './src/assets/img',
+            to: './img'
+        }])
+    ],
+    devServer: {
+        contentBase: path.join(process.cwd(), 'dist'),
+        compress: true,
+        port: 3000,
+    },
+};

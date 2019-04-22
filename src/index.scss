@@ -1,0 +1,24 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  background: $colorBgr;
+
+  h1 {
+    color: $fontColor;
+  }
+
+  #root {
+    width: calc(100vw - 50px);
+    border: 3px solid #444;
+    box-sizing: border-box;
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+
+      &:last-child {
+      justify-content: flex-start;
+      }
+    }
+  }
+}
