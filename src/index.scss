@@ -64,6 +64,23 @@ body {
       &:last-child {
       justify-content: flex-start;
       }
+
+      .galleryItem {
+        position: relative;
+
+        &-tooltip {
+          position: absolute;
+          left: 10%;
+          top: 15%;
+          background: $colorBgr;
+          padding: 3px;
+          font-size: 10px;
+          display: none;
+        }
+        &:hover .galleryItem-tooltip {
+          display: block;
+        }
+      }
     }
   }
 }

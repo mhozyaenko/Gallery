@@ -14,7 +14,7 @@ const getImagesInfo = data => {
                 item.height = img.height;
                 clearInterval(interval);
             }
-        },100);
+        },200);
     });
 
     return tmpData;

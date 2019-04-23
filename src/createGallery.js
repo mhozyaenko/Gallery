@@ -49,11 +49,15 @@ const galleryRender = (galleryRowsArray, root) =>{
         rowNode.className = "row";
         shuffleArray(row);
         row.forEach(item => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = "galleryItem";
             const img = new Image();
             img.src = `./img/${item.src}`;
             img.height = item.newHeight;
             img.width = item.newWidth;
-            rowNode.appendChild(img);
+            galleryItem.appendChild(img);
+            galleryItem.innerHTML += `<span class="galleryItem-tooltip">${item.title}</span>`;
+            rowNode.appendChild(galleryItem);
         });
 
         root.appendChild(rowNode);
