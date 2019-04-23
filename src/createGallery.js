@@ -9,35 +9,43 @@ const getImagesNewSize = (data, rowHeight) => {
     });
 };
 
-const getOptimizedGallery = (images, gallery) => {
-    let countRaw = 1;
+const optimizationAlgorythm = (data, sortProperty, limitCondition) => {
     const result = {};
+    let countRaw;
 
-    for (let i=0; i<images.length; i++) {
-        if (images[i].newWidth > gallery.width) {
-            console.error(`OOPS!!! image ${images[i].title} is too long for gallery`)
+    for (let i=0; i<data.length; i++) {
+        if (data[i][sortProperty] > limitCondition) {
+            console.error(`OOPS!!! image ${data[i].title} is too long for gallery`)
         } else {
             for (let j = 1; j>0; j++) {
                 countRaw = j;
                 result[countRaw] = result[countRaw] || [];
-                if (result[countRaw].reduce( (acc, cur) => acc + cur.newWidth, 0) + images[i].newWidth <= gallery.width) {
-                    result[countRaw].push(images[i]);
+                if (result[countRaw].reduce( (acc, cur) => acc + cur[sortProperty], 0) + data[i][sortProperty] <= limitCondition) {
+                    result[countRaw].push(data[i]);
                     break;
                 }
             }
         }
     }
     return result;
-};
+}
 
-const galleryRender = (gallery, root) =>{
-    const galleryRows = Object.values(gallery);
+const getOptimizedGallery = (data, screen) => {
+    const optimized = optimizationAlgorythm(data, "newWidth", screen.width);
+    const galleryRows = Object.values(optimized);
     const last = galleryRows[galleryRows.length-1];
+
     galleryRows.pop();
     shuffleArray(galleryRows);
     galleryRows.push(last);
+
+    return galleryRows;
+};
+
+const galleryRender = (galleryRowsArray, root) =>{
+    console.log(galleryRowsArray);
     root.innerHTML = '';
-    for (let row of Object.values(galleryRows)) {
+    for (let row of Object.values(galleryRowsArray)) {
         const rowNode = document.createElement('div');
         rowNode.className = "row";
         shuffleArray(row);
@@ -53,12 +61,12 @@ const galleryRender = (gallery, root) =>{
     }
 }
 
-const shuffleArray = a => {
-    for (let i = a.length - 1; i > 0; i--) {
+const shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    return a;
+    return array;
 }
 
 export const createGallery = (screen, data, rows, root) => {
