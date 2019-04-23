@@ -4,8 +4,7 @@ import {createGallery} from './createGallery'
 
 const root = document.getElementById('root');
 const rowSlider = document.getElementById('rowsCount');
-
-const rows = rowSlider.value;
+const queryByTitle = document.getElementById('filterByTitle');
 
 const getScreenSize = () => ({
     // width: (window.innerWidth >=0) ? window.innerWidth : screen.width,
@@ -18,6 +17,13 @@ rowSlider.addEventListener('change', function(e) {
     document.querySelector('.rowsSlider-slider-label').innerHTML = rowsCount;
     createGallery(getScreenSize(), images, rowsCount, root);
 });
+
+queryByTitle.addEventListener('keyup', function(e) {
+    const query = e.target.value.toLowerCase();
+    const filteredImages = (query.length ===0) ? images : images.filter(item => item.title.toLowerCase().includes(query));
+    (filteredImages.length ===0) ? root.innerHTML = `Sorry.... No matches....`
+        : createGallery(getScreenSize(), filteredImages, rowSlider.value, root);
+})
 
 createGallery(getScreenSize(), images, rowSlider.value, root);
 
