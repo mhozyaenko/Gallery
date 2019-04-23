@@ -43,7 +43,6 @@ const getOptimizedGallery = (data, screen) => {
 };
 
 const galleryRender = (galleryRowsArray, root) =>{
-    console.log(galleryRowsArray);
     root.innerHTML = '';
     for (let row of Object.values(galleryRowsArray)) {
         const rowNode = document.createElement('div');

@@ -3,10 +3,55 @@ body {
   height: 100vh;
   background: $colorBgr;
 
-  h1 {
-    color: $fontColor;
-  }
+  //h1 {
+  //  color: $fontColor;
+  //}
+  .rowsSlider {
+    width: 80vw;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 
+    &-slider {
+      width: 43vw;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+
+      #rowsCount {
+        width: 40vw;
+        max-width: 450px;
+        -webkit-appearance: none;
+        border-radius: 10px;
+
+        &:focus {
+          outline: none;
+      }
+        //add -moz- and -ms- prefixes
+        &::-webkit-slider-runnable-track {
+          height: 5px;
+          cursor: pointer;
+          border: none;
+          border-radius: 10px;
+          background: $colorPrimary;
+        }
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 9px;
+          height: 20px;
+          margin-top: -7px;
+          background: $fontColor;
+          border: none;
+          box-shadow: none;
+          border-radius: 8px;
+        }
+      }
+    }
+
+  }
   #root {
     width: calc(100vw - 50px);
     border: 3px solid #444;
