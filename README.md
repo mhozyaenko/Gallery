@@ -6,5 +6,7 @@ Use the algorythm to resize and locate all images in rows to minimize gaps betwe
 
 Use slider to change number of rows viewed on screen
 
+Use search bar to find image by title
+
 Clone repo and 
 npm install 
