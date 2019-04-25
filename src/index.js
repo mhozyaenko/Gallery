@@ -81,6 +81,20 @@ const sliderEvents = (sliderNode, sliderLabel, sliderControlPrev, sliderControlN
     sliderNode.addEventListener('mouseup', () => {
         sliderIsMousedown = false
     });
+    sliderNode.addEventListener('mouseenter', () => {
+        document.querySelector('body').style.overflow = 'hidden';
+    });
+    sliderNode.addEventListener('mouseout', () => {
+        document.querySelector('body').style.overflow = 'unset';
+    })
+    sliderNode.addEventListener('wheel', (e) => {
+        const sliderValue = (e.wheelDelta > 0) ? String(Number(sliderNode.value) + controlStep)
+            : String(Number(sliderNode.value) - controlStep);
+        sliderNode.value = sliderValue;
+        sliderLabel.innerHTML = sliderValue;
+        sliderActions(sliderValue);
+        nowSliderValue = sliderNode.value;
+    });
     sliderControlPrev.addEventListener('click', function (e) {
         const sliderValue = String(Number(sliderNode.value) - controlStep);
         sliderNode.value = sliderValue;
