@@ -5,6 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="./main.css">
     <title>Gallery</title>
 </head>
@@ -12,12 +14,45 @@
 <div class="rowsSlider">
     <h4>Change Rows Count</h4>
     <div class="rowsSlider-slider">
+        <button type="button" class="sliderControls rowsSlider-control-next"><i class="fas fa-chevron-right"></i>
+        </button>
         <label for="rowsCount" class="rowsSlider-slider-label">10</label>
-        <input type="range" min="1" max="25" value="10" id="rowsCount"  />
+        <input type="range" min="1" max="25" value="10" id="rowsCount"/>
+        <button type="button" class="sliderControls rowsSlider-control-prev"><i class="fas fa-chevron-left"></i>
+        </button>
     </div>
 </div>
 <div class="filter">
-    <input type="search" placeholder="Search Image By Title" id="filterByTitle">
+    <input type="search" placeholder="Search Image By Title" id="filterByTitle"/>
+    <div class="widthFilter-slider">
+        <span>Width from <label for="widthFilterFrom" class="widthFrom-label">250</label>px</span>
+        <button type="button" class="sliderControls widthFromSlider-control-prev"><i class="fas fa-chevron-left"></i>
+        </button>
+        <input type="range" min="1" max="25" value="10" id="widthFilterFrom"/>
+        <button type="button" class="sliderControls widthFromSlider-control-next"><i class="fas fa-chevron-right"></i>
+        </button>
+        <span class="sliderTo-span">to <label for="widthFilterTo" class="widthTo-label">250</label>px</span>
+        <button type="button" class="sliderControls widthToSlider-control-prev"><i class="fas fa-chevron-left"></i>
+        </button>
+        <input type="range" min="1" max="25" value="10" id="widthFilterTo"/>
+        <button type="button" class="sliderControls widthToSlider-control-next"><i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    <div class="heightFilter-slider">
+        <span>Height from <label for="heightFilterFrom" class="heightFrom-label">250</label>px</span>
+        <button type="button" class="sliderControls heightFromSlider-control-prev"><i class="fas fa-chevron-left"></i>
+        </button>
+        <input type="range" min="1" max="25" value="10" id="heightFilterFrom"/>
+        <button type="button" class="sliderControls heightFromSlider-control-next"><i class="fas fa-chevron-right"></i>
+        </button>
+        <span class="sliderTo-span">to <label class="heightTo-label" for="heightFilterTo">250</label>px</span>
+        <button type="button" class="sliderControls heightToSlider-control-prev"><i class="fas fa-chevron-left"></i>
+        </button>
+        <input type="range" min="1" max="25" value="10" id="heightFilterTo"/>
+        <button type="button" class="sliderControls heightToSlider-control-next"><i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    <h4><span class="filtersImagesResult">200</span> images found</h4>
 </div>
 <div id="root">
 

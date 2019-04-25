@@ -20,46 +20,77 @@ body {
       flex-direction: row-reverse;
       justify-content: space-between;
       align-items: center;
+    }
+  }
 
-      #rowsCount {
-        width: 40vw;
-        max-width: 450px;
-        -webkit-appearance: none;
-        border-radius: 10px;
+  input[type=range] {
+    width: 40vw;
+    max-width: 450px;
+    -webkit-appearance: none;
+    border-radius: 10px;
 
-        &:focus {
-          outline: none;
-      }
-        //add -moz- and -ms- prefixes
-        &::-webkit-slider-runnable-track {
-          height: 5px;
-          cursor: pointer;
-          border: none;
-          border-radius: 10px;
-          background: $colorPrimary;
-        }
-        &::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          width: 9px;
-          height: 20px;
-          margin-top: -7px;
-          background: $fontColor;
-          border: none;
-          box-shadow: none;
-          border-radius: 8px;
-        }
-      }
+    &:focus {
+      outline: none;
     }
 
+    //add -moz- and -ms- prefixes
+    &::-webkit-slider-runnable-track {
+      height: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background: $colorPrimary;
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 9px;
+      height: 20px;
+      margin-top: -7px;
+      background: $fontColor;
+      border: none;
+      box-shadow: none;
+      border-radius: 8px;
+    }
   }
+
   .filter {
     width: 80vw;
     margin: 15px auto;
-    input {
+
+    #filterByTitle {
       padding: 5px 10px;
       width: 250px;
     }
+
+    .widthFilter-slider, .heightFilter-slider {
+      width: 80vw;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        width: 150px;
+      }
+
+      .sliderTo-span {
+        text-align: right;
+      }
+
+      input {
+        width: 25vw;
+      }
+    }
   }
+
+  .sliderControls {
+    border: none;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+  }
+
   #root {
     width: calc(100vw - 50px);
     border: 3px solid #444;
@@ -70,7 +101,7 @@ body {
       justify-content: space-between;
 
       &:last-child {
-      justify-content: flex-start;
+        justify-content: flex-start;
       }
 
       .galleryItem {
@@ -86,6 +117,7 @@ body {
           display: none;
           z-index: 100;
         }
+
         &:hover .galleryItem-tooltip {
           display: block;
         }
