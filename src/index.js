@@ -62,7 +62,7 @@ const sliderEvents = (sliderNode, sliderLabel, sliderControlPrev, sliderControlN
         const sliderValue = e.target.value;
         if (nowSliderValue !== sliderValue) {
             sliderLabel.innerHTML = sliderValue;
-            sliderActions(sliderLabel, sliderValue, nowSliderValue);
+            sliderActions(sliderValue);
             nowSliderValue = sliderValue;
         }
     });
@@ -74,7 +74,7 @@ const sliderEvents = (sliderNode, sliderLabel, sliderControlPrev, sliderControlN
         const sliderValue = e.target.value;
         if (sliderValue !== nowSliderValue) {
             sliderLabel.innerHTML = sliderValue;
-            sliderActions(sliderLabel, sliderValue, nowSliderValue);
+            sliderActions(sliderValue);
             nowSliderValue = sliderValue;
         }
     });
@@ -85,14 +85,14 @@ const sliderEvents = (sliderNode, sliderLabel, sliderControlPrev, sliderControlN
         const sliderValue = String(Number(sliderNode.value) - controlStep);
         sliderNode.value = sliderValue;
         sliderLabel.innerHTML = sliderValue;
-        sliderActions(sliderLabel, sliderValue, nowSliderValue);
+        sliderActions(sliderValue);
         nowSliderValue = sliderNode.value;
     });
     sliderControlNext.addEventListener('click', function (e) {
         const sliderValue = Number(sliderNode.value) + controlStep;
         sliderNode.value = sliderValue;
         sliderLabel.innerHTML = sliderValue;
-        sliderActions(sliderLabel, sliderValue, nowSliderValue);
+        sliderActions(sliderValue);
         nowSliderValue = sliderNode.value;
     });
 };
