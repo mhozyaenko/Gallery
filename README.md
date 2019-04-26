@@ -11,6 +11,8 @@ Use search bar to find image by title
 
 Use sliders to filter images by origin sizes
 
+Reset all filters using reset button
+
 Clone repo and 
 
 $ npm install 

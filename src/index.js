@@ -1,9 +1,12 @@
 import './index.scss';
-import {images} from './getData';
+// import {images} from './getData';
 import {createGallery} from './createGallery';
 import {sliderMaxAndMin} from './getMinAndMaxSizes';
+import State from './imageState';
 
 const root = document.getElementById('root');
+const images = State.filteredList();
+
 const rowSlider = document.getElementById('rowsCount');
 const rowSliderLabel = document.querySelector('.rowsSlider-slider-label');
 const nextRowSlider = document.querySelector('.rowsSlider-control-next');
@@ -29,14 +32,25 @@ const filterByHeightToPrev = document.querySelector('.heightToSlider-control-pre
 const filterByHeightToNext = document.querySelector('.heightToSlider-control-next');
 const filtersResult = document.querySelector('.filtersImagesResult');
 
+const resetFilters = document.querySelector('.resetFilters');
 const getScreenSize = () => ({
     // width: (window.innerWidth >=0) ? window.innerWidth : screen.width,
     height: (window.innerHeight >= 0) ? window.innerHeight : screen.height,
     width: root.clientWidth
 });
 
+const getFilteredByTitle = (titleQuery) => {
+    const imagesCount = document.querySelectorAll('#root img').length;
+    State.setState("titleQuery", titleQuery);
+    const filteredImages = State.filteredList();
+    if (imagesCount === filteredImages.length) return;
+    (filteredImages.length === 0) ? root.innerHTML = `Sorry.... No matches....`
+        : createGallery(getScreenSize(), filteredImages, rowSlider.value, root);
+    filtersResult.innerText = filteredImages.length;
+};
+
 const rowSliderActions = (sliderValue) => {
-    createGallery(getScreenSize(), images, sliderValue, root);
+    createGallery(getScreenSize(), State.filteredList(), sliderValue, root);
 }
 
 const sizeSliderActions = () => {
@@ -46,9 +60,11 @@ const sizeSliderActions = () => {
     const maxHeightQuery = Number(filterByHeightTo.value);
     if (minWidthQuery > maxWidthQuery || minHeightQuery > maxHeightQuery) console.error('impossible conditions');
     const imagesCount = document.querySelectorAll('#root img').length;
-    const filteredImages = images.filter(item => (
-        item.width >= minWidthQuery && item.width <= maxWidthQuery && item.height >= minHeightQuery && item.height <= maxHeightQuery
-    ));
+    State.setState("minWidth", minWidthQuery);
+    State.setState("maxWidth", maxWidthQuery);
+    State.setState("minHeight", minHeightQuery);
+    State.setState("maxHeight", maxHeightQuery);
+    const filteredImages = State.filteredList();
     if (imagesCount === filteredImages.length) return;
     (filteredImages.length === 0) ? root.innerHTML = `Sorry.... No matches....`
         : createGallery(getScreenSize(), filteredImages, rowSlider.value, root);
@@ -146,13 +162,21 @@ sliderEvents(filterByHeightTo, filterByHeightToLabel, filterByHeightToPrev, filt
 
 queryByTitle.addEventListener('keyup', function (e) {
     const query = e.target.value.toLowerCase();
-    const filteredImages = (query.length === 0) ? images : images.filter(item => item.title.toLowerCase().includes(query));
-    const imagesCount = document.querySelectorAll('#root img').length;
-    if (imagesCount === filteredImages.length) return;
+    getFilteredByTitle(query);
+});
 
-    (filteredImages.length === 0) ? root.innerHTML = `Sorry.... No matches....`
-        : createGallery(getScreenSize(), filteredImages, rowSlider.value, root);
-    filtersResult.innerText = filteredImages.length;
+queryByTitle.addEventListener('search', function (e) {
+    const query = e.target.value.toLowerCase();
+    getFilteredByTitle(query);
+});
+
+resetFilters.addEventListener('click', function (e) {
+    queryByTitle.value = "";
+    sizesFilterInitialState();
+    State.resetState();
+    const images = State.filteredList()
+    createGallery(getScreenSize(), images, rowSlider.value, root);
+    filtersResult.innerHTML = images.length;
 });
 
 createGallery(getScreenSize(), images, rowSlider.value, root);

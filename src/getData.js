@@ -15,8 +15,8 @@ const getImagesInfo = data => {
                 clearInterval(interval);
             }
         }, 200);
-    });
 
+    });
     return tmpData;
 };
 
