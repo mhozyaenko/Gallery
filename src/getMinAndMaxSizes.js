@@ -16,9 +16,10 @@ const getMaxAndMinValues = (data) => {
                 if (item.height < result.minHeight) result.minHeight = item.height;
             });
             return result;
-            clearInterval(interval);
+            clearInterval(interval); // TODO: check this
         }
     }, 200);
+
     return result;
 };
 
