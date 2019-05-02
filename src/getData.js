@@ -2,19 +2,23 @@ import data from './data.json';
 
 const getImagesInfo = data => {
     const tmpData = data.map(i => i);
+    const asyncImageLoader = (url) => {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+
+            image.src = url;
+            image.onload = () => resolve(image);
+            image.onerror = () => reject(new Error('could not load image'));
+        })
+    };
 
     tmpData.map(item => {
-        const img = new Image();
+        const image = asyncImageLoader(`./img/${item.src}`);
 
-        img.src = `./img/${item.src}`;
-
-        const interval = setInterval(() => {
-            if (img.width > 0 && img.height > 0) {
-                item.width = img.width;
-                item.height = img.height;
-                clearInterval(interval);
-            }
-        }, 200);
+        image.then(image => {
+            item.width = image.width;
+            item.height = image.height;
+        });
     });
 
     return tmpData;
