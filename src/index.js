@@ -1,6 +1,6 @@
 import './index.scss';
 // import {images} from './getData';
-import {createGallery} from './createGallery';
+import createGallery from './createGallery';
 import {sliderMaxAndMin} from './getMinAndMaxSizes';
 import State from './imageState';
 
