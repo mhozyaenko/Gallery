@@ -3,201 +3,144 @@ import './index.scss';
 import createGallery from './createGallery';
 import {sliderMaxAndMin} from './getMinAndMaxSizes';
 import State from './imageState';
+import { RowSlider, SizeSlider } from './sliders';
+import SearchBar from './searchBar';
 
 const root = document.getElementById('root');
 const images = State.filteredList();
+const controls = document.getElementById('controlsPanel');
+const rowSliderValue = (document.getElementById('rowsCount')) ? document.getElementById('rowsCount').value : 10;
 
-const rowSlider = document.getElementById('rowsCount');
-const rowSliderLabel = document.querySelector('.rowsSlider-slider-label');
-const nextRowSlider = document.querySelector('.rowsSlider-control-next');
-const prevRowSlider = document.querySelector('.rowsSlider-control-prev');
-
-const queryByTitle = document.getElementById('filterByTitle');
-
-const filterByWidthFrom = document.getElementById('widthFilterFrom');
-const filterByWidthTo = document.getElementById('widthFilterTo');
-const filterByHeightFrom = document.getElementById('heightFilterFrom');
-const filterByHeightTo = document.getElementById('heightFilterTo');
-const filterByWidthFromLabel = document.querySelector('.widthFrom-label');
-const filterByWidthToLabel = document.querySelector('.widthTo-label');
-const filterByHeightFromLabel = document.querySelector('.heightFrom-label');
-const filterByHeightToLabel = document.querySelector('.heightTo-label');
-const filterByWidthFromPrev = document.querySelector('.widthFromSlider-control-prev');
-const filterByWidthFromNext = document.querySelector('.widthFromSlider-control-next');
-const filterByWidthToPrev = document.querySelector('.widthToSlider-control-prev');
-const filterByWidthToNext = document.querySelector('.widthToSlider-control-next');
-const filterByHeightFromPrev = document.querySelector('.heightFromSlider-control-prev');
-const filterByHeightFromNext = document.querySelector('.heightFromSlider-control-next');
-const filterByHeightToPrev = document.querySelector('.heightToSlider-control-prev');
-const filterByHeightToNext = document.querySelector('.heightToSlider-control-next');
 const filtersResult = document.querySelector('.filtersImagesResult');
 const resetFilters = document.querySelector('.resetFilters');
 
 const getScreenSize = () => ({
-    // width: (window.innerWidth >=0) ? window.innerWidth : screen.width,
-    height: (window.innerHeight >= 0) ? window.innerHeight : screen.height,
-    width: root.clientWidth,
+  height: (window.innerHeight >= 0) ? window.innerHeight : screen.height,
+  width: root.clientWidth,
 });
-
-const getFilteredByTitle = (titleQuery) => {
-    const imagesCount = document.querySelectorAll('#root img').length;
-    State.setState('titleQuery', titleQuery);
-    const filteredImages = State.filteredList();
-    if (imagesCount === filteredImages.length) return;
-    (filteredImages.length === 0) ? root.innerHTML = `Sorry.... No matches....`
-        : createGallery(getScreenSize(), filteredImages, rowSlider.value, root);
-    filtersResult.innerText = filteredImages.length;
-};
 
 const rowSliderActions = (sliderValue) => createGallery(getScreenSize(), State.filteredList(), sliderValue, root);
 
-const sizeSliderActions = () => {
-    const minWidthQuery = Number(filterByWidthFrom.value);
-    const maxWidthQuery = Number(filterByWidthTo.value);
-    const minHeightQuery = Number(filterByHeightFrom.value);
-    const maxHeightQuery = Number(filterByHeightTo.value);
-    const imagesCount = document.querySelectorAll('#root img').length;
+const sizeSliderActions = () => {  
+  const minWidthQuery = Number(document.getElementById('widthFilterFrom').value);
+  const maxWidthQuery = Number(document.getElementById('widthFilterTo').value);
+  const minHeightQuery = Number(document.getElementById('heightFilterFrom').value);
+  const maxHeightQuery = Number(document.getElementById('heightFilterTo').value);
+  const imagesCount = document.querySelectorAll('#root img').length;
 
-    if (minWidthQuery > maxWidthQuery || minHeightQuery > maxHeightQuery) console.error('impossible conditions');
+  if (minWidthQuery > maxWidthQuery || minHeightQuery > maxHeightQuery) console.error('impossible conditions');
 
-    State.setState('minWidth', minWidthQuery);
-    State.setState('maxWidth', maxWidthQuery);
-    State.setState('minHeight', minHeightQuery);
-    State.setState('maxHeight', maxHeightQuery);
+  State.setState('minWidth', minWidthQuery);
+  State.setState('maxWidth', maxWidthQuery);
+  State.setState('minHeight', minHeightQuery);
+  State.setState('maxHeight', maxHeightQuery);
 
-    const filteredImages = State.filteredList();
+  const filteredImages = State.filteredList();
 
-    if (imagesCount === filteredImages.length) return;
+  if (imagesCount === filteredImages.length) return;
 
-    (filteredImages.length === 0)
-        ? root.innerHTML = `Sorry.... No matches....`
-        : createGallery(getScreenSize(), filteredImages, rowSlider.value, root);
+  (filteredImages.length === 0)
+      ? root.innerHTML = `Sorry.... No matches....`
+      : createGallery(getScreenSize(), filteredImages, rowSliderValue, root);
 
-    filtersResult.innerHTML = filteredImages.length;
+  filtersResult.innerHTML = filteredImages.length;  
 };
 
-const sliderEvents = (sliderNode, sliderLabel, sliderControlPrev, sliderControlNext, controlStep, sliderActions) => {
-    let nowSliderValue = sliderNode.value;
-    let sliderIsMousedown = false;
+const sizesFilterInitialState = (filterByWidthFrom, filterByWidthTo, filterByHeightFrom, filterByHeightTo ) => {
 
-    sliderNode.addEventListener('change', function (e) {
-        const sliderValue = e.target.value;
-
-        if (nowSliderValue !== sliderValue) {
-            sliderLabel.innerHTML = sliderValue;
-            sliderActions(sliderValue);
-            nowSliderValue = sliderValue;
-        }
-    });
-
-    sliderNode.addEventListener('mousedown', () => {
-        sliderIsMousedown = true
-    });
-
-    sliderNode.addEventListener('mousemove', function (e) {
-        if (!sliderIsMousedown) return;
-
-        const sliderValue = e.target.value;
-
-        if (sliderValue !== nowSliderValue) {
-            sliderLabel.innerHTML = sliderValue;
-            sliderActions(sliderValue);
-            nowSliderValue = sliderValue;
-        }
-    });
-    sliderNode.addEventListener('mouseup', () => {
-        sliderIsMousedown = false
-    });
-    sliderNode.addEventListener('mouseenter', () => {
-        document.querySelector('body').style.overflow = 'hidden';
-    });
-    sliderNode.addEventListener('mouseout', () => {
-        document.querySelector('body').style.overflow = 'unset';
-    });
-    sliderNode.addEventListener('wheel', (e) => {
-        const sliderValue = (e.wheelDelta > 0)
-            ? String(Number(sliderNode.value) + controlStep)
-            : String(Number(sliderNode.value) - controlStep);
-
-        sliderNode.value = sliderValue;
-        sliderLabel.innerHTML = sliderValue;
-        sliderActions(sliderValue);
-        nowSliderValue = sliderNode.value;
-    });
-    sliderControlPrev.addEventListener('click', function (e) {
-        const sliderValue = String(Number(sliderNode.value) - controlStep);
-
-        sliderNode.value = sliderValue;
-        sliderLabel.innerHTML = sliderValue;
-        sliderActions(sliderValue);
-        nowSliderValue = sliderNode.value;
-    });
-    sliderControlNext.addEventListener('click', function (e) {
-        const sliderValue = Number(sliderNode.value) + controlStep;
-
-        sliderNode.value = sliderValue;
-        sliderLabel.innerHTML = sliderValue;
-        sliderActions(sliderValue);
-        nowSliderValue = sliderNode.value;
-    });
+  const intervalSizes = setInterval(() => {
+      if (Object.values(sliderMaxAndMin).length > 0) {
+          filterByWidthFrom.setValue(sliderMaxAndMin.minWidth, sliderMaxAndMin.maxWidth, sliderMaxAndMin.minWidth );
+          filterByWidthTo.setValue(sliderMaxAndMin.minWidth, sliderMaxAndMin.maxWidth, sliderMaxAndMin.maxWidth );
+          filterByHeightFrom.setValue(sliderMaxAndMin.minHeight, sliderMaxAndMin.maxHeight, sliderMaxAndMin.minHeight );
+          filterByHeightTo.setValue(sliderMaxAndMin.minHeight, sliderMaxAndMin.maxHeight, sliderMaxAndMin.maxHeight )
+          clearInterval(intervalSizes);
+      }
+  }, 100);
 };
-
-const setSizeForSlider = (min, max, ...targets) => {
-    targets.forEach(item => {
-        item.setAttribute('min', min);
-        item.setAttribute('max', max);
-    });
+const getFilteredByTitle = (titleQuery) => {
+  const imagesCount = document.querySelectorAll('#root img').length;
+  State.setState('titleQuery', titleQuery);
+  const filteredImages = State.filteredList();
+  if (imagesCount === filteredImages.length) return;
+  (filteredImages.length === 0) ? root.innerHTML = `Sorry.... No matches....`
+      : createGallery(getScreenSize(), filteredImages, rowSliderValue, root);
+  filtersResult.innerText = filteredImages.length;
 };
+// render
+const rowSlider = new RowSlider('rowsSlider', 'rowsCount', 'rowsSlider-slider-label', rowSliderValue, 1, rowSliderActions, controls, 1, 25);
+rowSlider.render();
+const filterByQuery = new SearchBar('filter-title', 'filterByTitle', 'Search Image By Title', controls, getFilteredByTitle);
+filterByQuery.render();
 
-const sizesFilterInitialState = () => {
-    const intervalSizes = setInterval(() => {
-        if (Object.values(sliderMaxAndMin).length > 0) {
-            setSizeForSlider(sliderMaxAndMin.minWidth, sliderMaxAndMin.maxWidth, filterByWidthFrom, filterByWidthTo);
-            setSizeForSlider(sliderMaxAndMin.minHeight, sliderMaxAndMin.maxHeight, filterByHeightFrom, filterByHeightTo);
-            filterByWidthFromLabel.innerHTML = sliderMaxAndMin.minWidth;
-            filterByWidthToLabel.innerHTML = sliderMaxAndMin.maxWidth;
-            filterByHeightFromLabel.innerHTML = sliderMaxAndMin.minHeight;
-            filterByHeightToLabel.innerHTML = sliderMaxAndMin.maxHeight;
-            filterByWidthFrom.value = sliderMaxAndMin.minWidth;
-            filterByWidthTo.value = sliderMaxAndMin.maxWidth;
-            filterByHeightFrom.value = sliderMaxAndMin.minHeight;
-            filterByHeightTo.value = sliderMaxAndMin.maxHeight;
-            clearInterval(intervalSizes);
-        }
-    }, 100);
-};
+const widthFromSlider = new SizeSlider('sizeFilter-slider', 
+                                        'widthFilterFrom', 
+                                        'widthFrom-label', 
+                                        State.getProperty('minWidth'), 
+                                        10,
+                                        sizeSliderActions, 
+                                        controls, 
+                                        'Width from', 
+                                        State.getProperty('minWidth'), 
+                                        State.getProperty('maxWidth'));
+widthFromSlider.render();
 
-sizesFilterInitialState();
+const widthToSlider = new SizeSlider('sizeFilter-slider', 
+                                      'widthFilterTo', 
+                                      'widthTo-label', 
+                                      State.getProperty('maxWidth'), 
+                                      10, 
+                                      sizeSliderActions, 
+                                      controls,
+                                      'to', 
+                                      State.getProperty('minWidth'), 
+                                      State.getProperty('maxWidth')
+ );
+widthToSlider.render();
 
-sliderEvents(rowSlider, rowSliderLabel, prevRowSlider, nextRowSlider, 1, rowSliderActions);
-sliderEvents(filterByWidthFrom, filterByWidthFromLabel, filterByWidthFromPrev, filterByWidthFromNext, 10, sizeSliderActions);
-sliderEvents(filterByWidthTo, filterByWidthToLabel, filterByWidthToPrev, filterByWidthToNext, 10, sizeSliderActions);
-sliderEvents(filterByHeightFrom, filterByHeightFromLabel, filterByHeightFromPrev, filterByHeightFromNext, 10, sizeSliderActions);
-sliderEvents(filterByHeightTo, filterByHeightToLabel, filterByHeightToPrev, filterByHeightToNext, 10, sizeSliderActions);
+const heightFromSlider = new SizeSlider('sizeFilter-slider', 
+                                      'heightFilterFrom', 
+                                      'heightFrom-label', 
+                                      State.getProperty('minHeight'), 
+                                      10, 
+                                      sizeSliderActions, 
+                                      controls,
+                                      'Height from', 
+                                      State.getProperty('minHeight'), 
+                                      State.getProperty('maxHeight')
+ );
+ heightFromSlider.render();
 
-queryByTitle.addEventListener('keyup', function (e) {
-    const query = e.target.value.toLowerCase();
+ const heightToSlider = new SizeSlider('sizeFilter-slider', 
+                                      'heightFilterTo', 
+                                      'heightTo-label', 
+                                      State.getProperty('maxHeight'), 
+                                      10, 
+                                      sizeSliderActions, 
+                                      controls,
+                                      'to', 
+                                      State.getProperty('minHeight'), 
+                                      State.getProperty('maxHeight')
+ );
+ heightToSlider.render();
 
-    getFilteredByTitle(query);
+sizesFilterInitialState(widthFromSlider, widthToSlider, heightFromSlider, heightToSlider );
+
+createGallery(getScreenSize(), images, rowSliderValue, root);
+
+window.addEventListener('resize', function () {
+    createGallery(getScreenSize(), images, rowSliderValue, root);
 });
+// render
 
-queryByTitle.addEventListener('search', function (e) {
-    const query = e.target.value.toLowerCase();
-
-    getFilteredByTitle(query);
-});
 
 resetFilters.addEventListener('click', function (e) {
-    queryByTitle.value = '';
-    sizesFilterInitialState();
+    document.getElementById('filterByTitle').value = '';
+    sizesFilterInitialState(widthFromSlider, widthToSlider, heightFromSlider, heightToSlider);
     State.resetState();
     const images = State.filteredList();
-    createGallery(getScreenSize(), images, rowSlider.value, root);
+    createGallery(getScreenSize(), images, rowSliderValue, root);
     filtersResult.innerHTML = images.length;
 });
 
-createGallery(getScreenSize(), images, rowSlider.value, root);
 
-window.addEventListener('resize', function () {
-    createGallery(getScreenSize(), images, rowSlider.value, root);
-});

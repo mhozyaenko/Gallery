@@ -29,6 +29,7 @@ const galleryRender = (galleryRowsArray, root) => {
 
 const createGallery = (screen, data, rows, root) => {
     const rowHeight = screen.height / rows;
+
     const interval = setInterval(() => {
         if (Object.values(data[data.length - 1]).length >= 4) {
             const images = getImagesNewSize(data, rowHeight);

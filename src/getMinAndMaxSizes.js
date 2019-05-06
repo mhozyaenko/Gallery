@@ -2,6 +2,7 @@ import {images} from './getData';
 
 const getMaxAndMinValues = (data) => {
     const result = {};
+
     const interval = setInterval(() => {
         if (data[data.length - 1].width > 0 && data[data.length - 1].height > 0) {
             result.maxWidth = data[0].width;

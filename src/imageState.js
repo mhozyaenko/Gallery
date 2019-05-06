@@ -25,7 +25,7 @@ const State = {
         }
 
     },
-    setState: (query, queryValue) => initialState[query] = queryValue,
+    setState: (prop, propValue) => initialState[prop] = propValue,
     resetState: () => {
         initialState.images = [...images];
         initialState.titleQuery = '';
@@ -35,6 +35,7 @@ const State = {
         initialState.maxHeight = 1000000;
         initialState.isFirstRender = true;
     },
+    getProperty: name => initialState[name]
 };
 
 Object.freeze(State);

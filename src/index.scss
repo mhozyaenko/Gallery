@@ -57,14 +57,27 @@ body {
   .filter {
     width: 80vw;
     margin: 15px auto;
-
-    #filterByTitle {
-      padding: 5px 10px;
-      width: 250px;
+    
     }
 
-    .widthFilter-slider, .heightFilter-slider {
-      width: 80vw;
+  #controlsPanel {
+    width: 80vw;
+    margin: 15px auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    
+    .filter-title {
+      width: 100%;
+
+      input {
+        padding: 5px 10px;
+        width: 250px;
+      }
+    }    
+    
+    .sizeFilter-slider {
+      width: 48%;
       margin: 10px 0;
       display: flex;
       justify-content: space-between;
